@@ -7,6 +7,9 @@ import dbModule as db
 
 app = Flask(__name__)
 
+'''
+обработчик от страницы создания статьи, получает из полей ввода строки и загружает в бд
+'''
 @app.route('/', methods=['GET', 'POST'])
 def page1():
     if request.method == 'POST':
@@ -18,6 +21,10 @@ def page1():
         return 'Успешно сохранено!', 200
     return render_template('page1.html')
 
+'''
+обработчик от страницы поиска статьи, получает строку из поля ввода, если она состоит из букв - поиск по 
+вхождению фразы в заголовок, если из цифр - поиск по id
+'''
 @app.route('/find', methods=['GET', 'POST'])
 def page2():
     if request.method == 'POST':
