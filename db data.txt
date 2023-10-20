@@ -24,8 +24,14 @@ SELECT * FROM articles WHERE id=@id;
 # select by title substring
 SELECT * FROM articles WHERE title LIKE '%@substring%';
 
+# delete article by id
+DELETE FROM articles WHERE id='@id';
+
 # adding picture
-INSERT INTO pictures(picture, picture_name, picture_type) VALUES (@picture, @picture_name, @type);
+INSERT INTO pictures(picture, picture_name, picture_type) VALUES (%s, '@picture_name', '@type');
 
 # select picture by name 
-SELECT * FROM pictures WHERE picture_name=@name;
+SELECT * FROM pictures WHERE picture_name='@name';
+
+# delete picture by name
+DELETE FROM pictures WHERE picture_name='@name';

@@ -1,3 +1,4 @@
+from calendar import c
 from re import T
 import mysql.connector
 
@@ -61,13 +62,18 @@ SELECT * FROM articles WHERE title LIKE '%@substring%';
 find_by_id_line = '''
 SELECT * FROM articles WHERE id=@id;
 '''
+delete_article_line = '''
+DELETE FROM articles WHERE id='@id';
+'''
 add_picture_line = '''
 INSERT INTO pictures(picture, picture_name, picture_type) VALUES (%s, \'@picture_name\', \'@type\');
 '''
 get_picture_by_name_line = '''
 SELECT * FROM pictures WHERE picture_name='@name';
 '''
-
+delete_picture_line = '''
+DELETE FROM pictures WHERE picture_name='@name';
+'''
 
 
 connection_config = get_connection_config_dictionary()
@@ -170,9 +176,18 @@ def find_by_id(id: str):
     else:
         return finded_article
 
-# make it later
-def delete_article_from_db(id):
-    None    
+# delete article
+def delete_article_from_db(id: str):
+    id = str(id)    
+
+    log(f'article with id={id} has been deleted')
+    connection, cursor = get_connection_and_cursor()
+
+    sql_action = delete_article_line.replace('@id', id)
+    
+    cursor.execute(sql_action)
+
+    dispose(connection, cursor)
 
 
 # add picture
@@ -194,9 +209,11 @@ def add_picture(picture: bytes, name: str, picture_type: str):
         dispose(connection, cursor)
 
 # find picture by name
-def find_picture_by_name(name):
+def find_picture_by_name(name: str):
+    log(f'picture {name} has been requested')    
+
     connection, cursor = get_connection_and_cursor()
-    
+
     sql_action = get_picture_by_name_line.replace('@name', name)
 
     cursor.execute(sql_action)
@@ -207,9 +224,17 @@ def find_picture_by_name(name):
     if len(finded_picture) != 1:
         return None
     else:
-        return finded_picture
+        return finded_picture[0]        # to simplify work with it
 
-# make it later
-def delete_picture_from_db(name):
-    None
+# delete picture
+def delete_picture_from_db(name: str):
+    log(f'picture {name} has been deleted')
+    
+    connection, cursor = get_connection_and_cursor()
+    
+    sql_action = delete_picture_line.replace('@name', name)
+    
+    cursor.execute(sql_action)
+
+    dispose(connection, cursor)
 

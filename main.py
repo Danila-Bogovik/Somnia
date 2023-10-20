@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Response
 import mysql.connector
 
 app = Flask(__name__)
@@ -6,23 +6,19 @@ app = Flask(__name__)
 
 import dbModule as db
 
-with open("cat2.jpg", "rb") as f:
-    image_data = f.read()
 
-db.add_new_article('another title', 'lol', 'heh')
+with open('Cat2.jpg', 'br') as f:
+    db.add_picture(f.read(), 'cat', 'image/jpeg')
+    
 
-print(db.find_by_substring_in_title('some'))
-
-print(db.find_picture_by_name('cat'))
 
 
 
 @app.route("/", methods=["GET", "POST"])
-def upload_file():
-    if request.method == "POST":
-        return "Файл успешно загружен и сохранен в базу данных!"
+def index():
+    picture_data = db.find_picture_by_name('cat')
 
-    return 'hello'
+    return Response(picture_data[1], content_type=picture_data[3])
 
 if __name__ == "__main__":
     app.run()
