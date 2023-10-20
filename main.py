@@ -14,12 +14,10 @@ db = mysql.connector.connect(
 @app.route("/", methods=["GET", "POST"])
 def upload_file():
     if request.method == "POST":
-        # Получение загруженного файла из формы
         file = request.files["file"]
         filename = file.filename
         filedata = file.read()
 
-        # Сохранение файла в базу данных
         cursor = db.cursor()
         cursor.execute("INSERT INTO files (filename, filedata) VALUES (%s, %s)", (filename, filedata))
         db.commit()
