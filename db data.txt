@@ -6,6 +6,13 @@ CREATE TABLE IF NOT EXISTS articles (
 	date_of_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	article MEDIUMTEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS pictures (
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    picture BLOB NOT NULL,
+    picture_name VARCHAR(50) UNIQUE NOT NULL,
+    picture_type VARCHAR(15) NOT NULL
+);
+
 
 # adding article
 INSERT INTO articles(title, subtitle, author, article) 
@@ -16,3 +23,9 @@ SELECT * FROM articles WHERE id=@id;
 
 # select by title substring
 SELECT * FROM articles WHERE title LIKE '%@substring%';
+
+# adding picture
+INSERT INTO pictures(picture, picture_name, picture_type) VALUES (@picture, @picture_name, @type);
+
+# select picture by name 
+SELECT * FROM pictures WHERE picture_name=@name;

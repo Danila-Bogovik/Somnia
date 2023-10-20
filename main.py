@@ -6,7 +6,14 @@ app = Flask(__name__)
 
 import dbModule as db
 
+with open("cat2.jpg", "rb") as f:
+    image_data = f.read()
+
+db.add_new_article('another title', 'lol', 'heh')
+
 print(db.find_by_substring_in_title('some'))
+
+print(db.find_picture_by_name('cat'))
 
 
 
@@ -15,7 +22,7 @@ def upload_file():
     if request.method == "POST":
         return "Файл успешно загружен и сохранен в базу данных!"
 
-    return render_template("index.html")
+    return 'hello'
 
 if __name__ == "__main__":
     app.run()
