@@ -1,0 +1,22 @@
+Модуль содержит следующие функции:
+
+add_new_article - добавляет новые статьи в базу данных. Вызывает внутри себя функцию для валидации.
+	Принимает три параметра: заголовок, подзаголовок и текст с ограниченной длинной. все границы указаны в начале.
+find_by_substring_in_title - ищет по подстроке в названии. принимает подстроку. в случае если статей по подстроке не найденно, возвращает None.
+find_by_id - то-же самое что и find_by_substring_in_title, но принимает id, и ищет по id.
+
+
+Таблица имеет следующую структуру:
+articles (
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+	title VARCHAR(50) NOT NULL,
+	subtitle VARCHAR(256) NOT NULL,
+	date_of_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	article MEDIUMTEXT NOT NULL
+);
+Пример возврата из таблицы:
+[(1, 'Some article', 'short subtitle', datetime.datetime(2023, 10, 20, 15, 1, 55), 'blah blah blah')]
+
+При вызове каждой функции вызывается фунуция log. Она отвечает за логирование. если логи не нужны, присвое ей labmda s: None
+
+Т.к. я считаю что комментарии на русском в коде - не есть хорошо, все комментарии на инглише.

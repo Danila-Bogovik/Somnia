@@ -3,27 +3,16 @@ import mysql.connector
 
 app = Flask(__name__)
 
-# Настройка соединения с базой данных MySQL
-db = mysql.connector.connect(
-    host="localhost",
-    user="yourusername",
-    password="yourpassword",
-    database="yourdatabase"
-)
+
+import dbModule as db
+
+print(db.find_by_substring_in_title('some'))
+
+
 
 @app.route("/", methods=["GET", "POST"])
 def upload_file():
     if request.method == "POST":
-        # Получение загруженного файла из формы
-        file = request.files["file"]
-        filename = file.filename
-        filedata = file.read()
-
-        # Сохранение файла в базу данных
-        cursor = db.cursor()
-        cursor.execute("INSERT INTO files (filename, filedata) VALUES (%s, %s)", (filename, filedata))
-        db.commit()
-
         return "Файл успешно загружен и сохранен в базу данных!"
 
     return render_template("index.html")

@@ -1,0 +1,18 @@
+# creation db
+CREATE TABLE IF NOT EXISTS articles (
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+	title VARCHAR(50) NOT NULL,
+	subtitle VARCHAR(256) NOT NULL,
+	date_of_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	article MEDIUMTEXT NOT NULL
+);
+
+# adding article
+INSERT INTO articles(title, subtitle, author, article) 
+VALUES ('@title', '@subtitle', '@article');
+
+# select by id
+SELECT * FROM articles WHERE id=@id;
+
+# select by title substring
+SELECT * FROM articles WHERE title LIKE '%@substring%';
