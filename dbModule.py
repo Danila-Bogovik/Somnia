@@ -1,7 +1,7 @@
 import mysql.connector
 
-title_max_length = 50
-subtitle_max_length = 256
+title_max_length = 100
+subtitle_max_length = 350
 text_max_lendth = 8_388_608; # because max len for mediumtext - 16MB, that 8 388 608 chars in utf-8
 
 
