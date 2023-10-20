@@ -5,6 +5,35 @@ subtitle_max_length = 256
 text_max_lendth = 8_388_608; # because max len for mediumtext - 16MB, that 8 388 608 chars in utf-8
 
 
+# function to get connection config
+def get_connection_config_dictionary():
+    try:
+        with open('connection config.txt') as f:
+            data = f.readlines()
+        
+        connection_config = {}
+        
+        for cl in data:                             # cl is connection line
+            line = cl.replace('\n', '').split(':')
+            connection_config[line[0]] = line[1]
+        
+    except:
+        print('\'connection config.txt\' not found or corrupted.\nPlease, input requasted information to connect database:')
+        
+        connection_config = {}
+        
+        connection_config['host'] = input('host:\t')
+        connection_config['user'] = input('user:\t')
+        connection_config['password'] = input('password:\t')
+        connection_config['database'] = input('database:\t')
+            
+        with open('connection config.txt', 'w') as f:
+            for key in connection_config:
+                f.write(f'{key}:{connection_config[key]}\n')
+    finally:
+        return connection_config
+
+
 db_creation_line = f'''CREATE TABLE IF NOT EXISTS articles (
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
 	title VARCHAR({title_max_length}) NOT NULL,
@@ -23,8 +52,10 @@ find_by_id_line = '''
 SELECT * FROM articles WHERE id=@id;
 '''
 
+connection_config = get_connection_config_dictionary()
 
-connection = mysql.connector.connect(host='127.0.0.1', user='root', password='1083', database='test')
+connection = mysql.connector.connect(host=connection_config['host'], user=connection_config['user'], 
+                                     password=connection_config['password'], database=connection_config['database'])
 cursor = connection.cursor()
 
 connection.autocommit = True
