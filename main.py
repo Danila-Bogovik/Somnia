@@ -1,29 +1,34 @@
 from flask import Flask, render_template, request
 import mysql.connector
 
-app = Flask(__name__)
-
+from flask import Flask, render_template, request
 
 import dbModule as db
 
-print(db.find_by_substring_in_title('some'))
+app = Flask(__name__)
 
+@app.route('/', methods=['GET', 'POST'])
+def page1():
+    if request.method == 'POST':
+        title = request.form.get('title')
+        subtitle = request.form.get('subtitle')
+        text = request.form.get('text')
 
+        db.add_new_article(title, subtitle, text)
+        return 'Успешно сохранено!', 200
+    return render_template('page1.html')
 
-@app.route("/", methods=["GET", "POST"])
-def upload_file():
-    if request.method == "POST":
+@app.route('/find', methods=['GET', 'POST'])
+def page2():
+    if request.method == 'POST':
+        data = request.form.get('data')
+        if data.isalpha():
+            db.find_by_substring_in_title(data)
+        elif data.isdigit():
+            db.find_by_id(data)
 
-        file = request.files["file"]
-        filename = file.filename
-        filedata = file.read()
-
-        cursor = db.cursor()
-        cursor.execute("INSERT INTO files (filename, filedata) VALUES (%s, %s)", (filename, filedata))
-        db.commit()
-        return "Файл успешно загружен и сохранен в базу данных!"
-
-    return render_template("index.html")
+        return 'Успешно сохранено!', 200
+    return render_template('page2.html')
 
 if __name__ == "__main__":
     app.run()
