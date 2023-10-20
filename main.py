@@ -18,7 +18,6 @@ def page1():
         text = request.form.get('text')
 
         db.add_new_article(title, subtitle, text)
-        return 'Успешно сохранено!', 200
     return render_template('index.html')
 
 '''
@@ -30,11 +29,11 @@ def page2():
     if request.method == 'POST':
         data = request.form.get('data')
         if data.isalpha():
-            db.find_by_substring_in_title(data)
+            return db.find_by_substring_in_title(data)
         elif data.isdigit():
-            db.find_by_id(data)
+            return db.find_by_id(data)
 
-        return 'Успешно сохранено!', 200
+
     return render_template('find.html')
 
 if __name__ == "__main__":
