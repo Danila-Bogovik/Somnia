@@ -2,7 +2,7 @@ import mysql.connector
 
 title_max_length = 50
 subtitle_max_length = 256
-text_max_lendth = 8_388_608; # because max len for mediumtext - 16MB, that 8 388 608 chars in utf-8
+text_max_lendth = 8_388_608
 
 
 db_creation_line = f'''CREATE TABLE IF NOT EXISTS articles (
@@ -12,6 +12,7 @@ db_creation_line = f'''CREATE TABLE IF NOT EXISTS articles (
 	date_of_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	article MEDIUMTEXT NOT NULL
 );'''
+
 add_article_line = '''
 INSERT INTO articles(title, subtitle, article) 
 VALUES ('@title', '@subtitle', '@article');
@@ -24,7 +25,7 @@ SELECT * FROM articles WHERE id=@id;
 '''
 
 
-connection = mysql.connector.connect(host='127.0.0.1', user='root', password='1083', database='test')
+connection = mysql.connector.connect(host='127.0.0.1', user='root', password='root', database='test')
 cursor = connection.cursor()
 
 connection.autocommit = True
@@ -47,9 +48,9 @@ def add_new_article(title: str, subtitle: str, article: str):
     if not is_article_valid(title, subtitle, article):
         raise Exception('invalid article')
 
-    sql_action = add_article_line.replace('@title', title).replace('@subtitle', subtitle).replace('@article', article);
+    sql_action = add_article_line.replace('@title', title).replace('@subtitle', subtitle).replace('@article', article)
 
-    cursor.execute(sql_action);
+    cursor.execute(sql_action)
 
     log(f'added article with title: {title}')
     
