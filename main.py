@@ -19,7 +19,7 @@ def page1():
 
         db.add_new_article(title, subtitle, text)
         return 'Успешно сохранено!', 200
-    return render_template('page1.html')
+    return render_template('index.html')
 
 '''
 обработчик от страницы поиска статьи, получает строку из поля ввода, если она состоит из букв - поиск по 
@@ -35,7 +35,7 @@ def page2():
             db.find_by_id(data)
 
         return 'Успешно сохранено!', 200
-    return render_template('page2.html')
+    return render_template('find.html')
 
 if __name__ == "__main__":
     app.run()
