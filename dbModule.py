@@ -59,6 +59,10 @@ VALUES ('@title', '@subtitle', '@article');
 find_by_substring_in_title_line = '''
 SELECT * FROM articles WHERE title LIKE '%@substring%';
 '''
+get_data_for_search_by_substring_line = '''
+SELECT id, title, subtitle, date_of_creation FROM articles
+WHERE title LIKE '%@substring%' LIMIT @amount OFFSET @skip;
+'''
 find_by_id_line = '''
 SELECT * FROM articles WHERE id=@id;
 '''
@@ -155,6 +159,22 @@ def find_by_substring_in_title(substring: str):
     else:
         return finded_articles
     
+# get data for search
+def get_data_for_search_by_substrinng(substring: str, amount: int, skip: int):
+    amount = str(int(amount))
+    skip = str(int(skip))
+
+    connection, cursor = get_connection_and_cursor()
+    
+    sql_action = get_data_for_search_by_substring_line.replace('@substring', substring).replace('@amount', amount).replace('@skip', skip)
+    
+    cursor.execute(sql_action)
+
+    data = cursor.fetchall()    
+
+    dispose(connection, cursor)
+    
+    return data
 
 # find by id
 def find_by_id(id: str):
