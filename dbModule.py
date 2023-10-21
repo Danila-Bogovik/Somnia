@@ -4,7 +4,7 @@ import mysql.connector
 
 title_max_length = 100
 subtitle_max_length = 350
-text_max_lendth = 8_388_608; # because max len for mediumtext - 16MB, that 8 388 608 chars in utf-8
+text_max_lendth = 8_388_608
 picture_name_max_length = 50
 picture_type_max_length = 15
 
@@ -102,7 +102,7 @@ connection.autocommit = True
 log = print
 
 # if db was not created, create
-cursor.execute(db_creation_line)
+cursor.execute(db_creation_line, multi=True)
 
 dispose(connection, cursor)
 
@@ -127,9 +127,9 @@ def add_new_article(title: str, subtitle: str, article: str):
     try:
         connection, cursor = get_connection_and_cursor()
 
-        sql_action = add_article_line.replace('@title', title).replace('@subtitle', subtitle).replace('@article', article);
+        sql_action = add_article_line.replace('@title', title).replace('@subtitle', subtitle).replace('@article', article)
 
-        cursor.execute(sql_action);
+        cursor.execute(sql_action)
 
         log(f'added article with title: {title}')
     finally:

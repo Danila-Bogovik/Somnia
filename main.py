@@ -17,7 +17,7 @@
 # @app.route("/", methods=["GET", "POST"])
 # def index():
 #     picture_data = db.find_picture_by_name('cat')
-# 
+#
 #     return Response(picture_data[1], content_type=picture_data[3])
 #
 # if __name__ == "__main__":
