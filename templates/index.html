@@ -1,15 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <title>Веб приложение для сервиса публикации статей</title>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <link rel="stylesheet"  type="text/css" href="{{url_for('.static', filename='css/style.css')}}">
+
 </head>
 <body>
-<form method="POST">
-    <input type="text" name="title">
-    <input type="text" name="subtitle">
-    <input type="text" name="text">
-    <button onclick="window.location.href = '/add_article';">Click Here</button>
-</form>
+
+    <form method="POST">
+        <input type="text" name="title" placeholder="Введите заголовок">
+        <input type="text" name="subtitle" placeholder="Введите подзаголовок">
+        <input type="text" name="text" placeholder="Введите текст">
+        <button type="submit" onclick="window.location.href = '/add_article';">Отправить</button>
+        <input type="file" name="image" accept="image/*">
+        <button type="submit">Загрузить картинку</button>
+    </form>
 </body>
+
 </html>
