@@ -26,7 +26,9 @@
 #
 #
 from flask import Flask, render_template, request
+import flask
 import mysql.connector
+import json
 
 from flask import Flask, render_template, request
 
@@ -54,17 +56,38 @@ def page1():
 обработчик от страницы поиска статьи, получает строку из поля ввода, если она состоит из букв - поиск по 
 вхождению фразы в заголовок, если из цифр - поиск по id
 '''
-@application.route('/find', methods=['GET', 'POST'])
-def page2():
+
+
+# @application.route('/find', methods=['GET', 'POST'])
+# def page2():
+#     if request.method == 'POST':
+#         data = request.form.get('data')
+#         if data.isalpha():
+#             return db.find_by_substring_in_title(data)
+#         elif data.isdigit():
+#             return db.find_by_id(data)
+#
+#     return render_template('find.html')
+
+
+@application.route('/search?substring=<substring>', methods=['GET', 'POST'])
+def page3():
     if request.method == 'POST':
         data = request.form.get('data')
         if data.isalpha():
-            return db.find_by_substring_in_title(data)
+            res = {}
+            d = db.get_data_for_search_by_substrinng(data, 10, 10)
+            for i in range(len(d)):
+                res[i+1] = d[i]
+            return flask.jsonify(res)
+
         elif data.isdigit():
             return db.find_by_id(data)
 
 
-    return render_template('find.html')
+    return render_template('search.html')
+
+
 
 if __name__ == "__main__":
     application.run(host='0.0.0.0')
