@@ -42,6 +42,11 @@ print(db.get_data_for_search_by_substrinng('ti', 2, 1))
 '''
 обработчик от страницы создания статьи, получает из полей ввода строки и загружает в бд
 '''
+
+@application.route('/', methods=['GET', 'POST'])
+def page0():
+    return render_template('index.html')
+
 @application.route('/add_article', methods=['GET', 'POST'])
 def page1():
     if request.method == 'POST':
