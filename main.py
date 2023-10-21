@@ -29,32 +29,49 @@ from flask import Flask, render_template, request
 import flask
 import mysql.connector
 import json
+from werkzeug.utils import secure_filename
+import os
 
 from flask import Flask, render_template, request
 
 import dbModule as db
 
 application = Flask(__name__)
-
+application.config['ALLOWED_EXTENSIONS'] = {'html'}
+application.config['UPLOAD_FOLDER'] = 'uploads/'
 print(db.get_data_for_search_by_substrinng('ti', 2, 1))
 
 '''
 обработчик от страницы создания статьи, получает из полей ввода строки и загружает в бд
 '''
 
+html_content = ""
+
 @application.route('/', methods=['GET', 'POST'])
 def page0():
     return render_template('index.html')
 
-@application.route('/add_article', methods=['GET', 'POST'])
+@application.route('/upload', methods=['GET', 'POST'])
 def page1():
-    if request.method == 'POST':
-        title = request.form.get('title')
-        subtitle = request.form.get('subtitle')
-        text = request.form.get('text')
+    # if request.method == 'POST':
+    #     title = request.form.get('title')
+    #     subtitle = request.form.get('subtitle')
+    #     text = request.form.get('text')
+    #
+    #     db.add_new_article(title, subtitle, text)
+    # return render_template('index.html')
 
-        db.add_new_article(title, subtitle, text)
-    return render_template('index.html')
+    if 'file' not in request.files:
+        return 'Нет части файла', 400 # Bad request
+    file = request.files['file']
+    if file.filename == '':
+        return 'Никакой файл не выбран', 400 # Bad request
+    if file and file.filename.endswith('.html'):
+        global html_content
+        html_content = file.read().decode() # читаем файл и переводим в строковую переменную
+        db.add_new_article("Заголовок", "Описание", html_content)
+        return 'Содержимое файла успешно сохранено в переменную', 200 # OK
+    return 'Неправильный файл', 400 # Bad request
 
 '''
 обработчик от страницы поиска статьи, получает строку из поля ввода, если она состоит из букв - поиск по 
