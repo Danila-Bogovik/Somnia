@@ -12,6 +12,11 @@ CREATE TABLE IF NOT EXISTS pictures (
     picture_name VARCHAR(50) UNIQUE NOT NULL,
     picture_type VARCHAR(15) NOT NULL
 );
+CREATE TABLE IF NOT EXISTS article_links (
+	link VARCHAR(200) PRIMARY KEY UNIQUE,
+    article_id INTEGER UNIQUE NOT NULL,
+    FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE
+);
 
 
 # adding article
@@ -39,3 +44,15 @@ SELECT * FROM pictures WHERE picture_name='@name';
 
 # delete picture by name
 DELETE FROM pictures WHERE picture_name='@name';
+
+# add link to article
+INSERT INTO article_links(link, article_id) 
+VALUES ('@link', @id);
+
+# get id by link
+SELECT article_id FROM article_links 
+WHERE link='@link';
+
+#get link by id
+SELECT link FROM article_links 
+WHERE article_id=@id;
