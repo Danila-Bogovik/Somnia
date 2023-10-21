@@ -24,54 +24,41 @@
 #     app.run()
 #
 #
-#
-from flask import Flask, render_template, request
+
+
+
+from msilib.schema import AppId
+from flask import Flask, app, render_template, request, Response, jsonify
 import flask
 import mysql.connector
 import json
-from werkzeug.utils import secure_filename
-import os
 
 from flask import Flask, render_template, request
 
 import dbModule as db
 
+
 application = Flask(__name__)
-application.config['ALLOWED_EXTENSIONS'] = {'html'}
-application.config['UPLOAD_FOLDER'] = 'uploads/'
-print(db.get_data_for_search_by_substrinng('ti', 2, 1))
+
+page_width = 10
 
 '''
 обработчик от страницы создания статьи, получает из полей ввода строки и загружает в бд
 '''
 
-html_content = ""
-
 @application.route('/', methods=['GET', 'POST'])
 def page0():
     return render_template('index.html')
 
-@application.route('/upload', methods=['GET', 'POST'])
+@application.route('/add_article', methods=['GET', 'POST'])
 def page1():
-    # if request.method == 'POST':
-    #     title = request.form.get('title')
-    #     subtitle = request.form.get('subtitle')
-    #     text = request.form.get('text')
-    #
-    #     db.add_new_article(title, subtitle, text)
-    # return render_template('index.html')
+    if request.method == 'POST':
+        title = request.form.get('title')
+        subtitle = request.form.get('subtitle')
+        text = request.form.get('text')
 
-    if 'file' not in request.files:
-        return 'Нет части файла', 400 # Bad request
-    file = request.files['file']
-    if file.filename == '':
-        return 'Никакой файл не выбран', 400 # Bad request
-    if file and file.filename.endswith('.html'):
-        global html_content
-        html_content = file.read().decode() # читаем файл и переводим в строковую переменную
-        db.add_new_article("Заголовок", "Описание", html_content)
-        return 'Содержимое файла успешно сохранено в переменную', 200 # OK
-    return 'Неправильный файл', 400 # Bad request
+        db.add_new_article(title, subtitle, text)
+    return render_template('index.html')
 
 '''
 обработчик от страницы поиска статьи, получает строку из поля ввода, если она состоит из букв - поиск по 
@@ -91,41 +78,42 @@ def page1():
 #     return render_template('find.html')
 
 
+
+@application.route('/search-page',  methods=['GET', 'POST'])
+def get_search_page():
+    return render_template('search-articles.html')
+
 @application.route('/search', methods=['GET', 'POST'])
-def page3():
-    return render_template('search.html')
+def search_articles_with_substring():
+    substring = request.args.get('s')  # s - Подстрока
+    page_index = request.args.get('i')  # i - индекс текущей страницы.
 
+    if not substring or not page_index:
+        data = None
+    else:
+        data = db.get_data_for_search_by_substrinng(substring, page_width, page_width * int(page_index))
 
-@application.route('/search?substring=<substring>', methods=['GET', 'POST'])
-def page4():
-    if request.method == 'POST':
-        data = request.form.get('data')
-        if data.isalpha():
-            res = {}
-            d = db.get_data_for_search_by_substrinng(data, 10, 10)
-            for i in range(len(d)):
-                res[i+1] = d[i]
-            return flask.jsonify(res)
+    if data is None:
+        return Response('Not found!', content_type='text/html')
+    else:
+        json_data = {}
+        for item in data:
+            item_id = item[0]
+            title = item[1]
+            subtitle = item[2]
+            date = item[3]
+            json_data[item_id] = {
+                'title': title,
+                'subtitle': subtitle,
+                'date': date
+            }
 
-        elif data.isdigit():
-            return db.find_by_id(data)
-
-    return render_template('search.html')
+        return jsonify(json_data)
 
 
 
 if __name__ == "__main__":
     application.run(host='0.0.0.0')
-
-
-
-
-
-
-
-
-
-
 
 
 

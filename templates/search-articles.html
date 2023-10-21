@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <section>
+        <input type="text" id="searchbar"/>
+        <input type="button" id="search-button" /> 
+        
+    </section>
+
+    <section id="articles-place">
+    </section>
+
+    <script>
+        let pageIndex = 0,
+            searchRequest;
+
+        function buildArticlePraview(id, articlePreview) {
+            console.log(1)
+
+            let preview =
+                `<article>
+                <a>
+                <h6>#${id}</h6>
+                <h1>${articlePreview['title']}</h1>
+                </a>
+                <p>${articlePreview['subtitle']}</p>
+                <div class='date-div'>${articlePreview['date']}</div>
+            </article>`;
+
+            return preview;
+        }
+
+        async function getArticles() {
+            console.log(2)
+
+            let response = await fetch(`/search?s=${searchRequest}&i=${pageIndex}`);
+
+            let articlePreviews = await response.json();
+
+            articlesPlace = document.getElementById('articles-place')
+
+            for (id in articlePreviews) {
+                articlesPlace.innerHTML = articlesPlace.innerHTML + buildArticlePraview(id, articlePreviews[id])
+            }
+
+            pageIndex++;
+        }
+
+
+
+        document.getElementById('search-button').onclick = function (event) {
+            document.getElementById('articles-place').innerHTML = '';
+            pageIndex = 0;
+            searchRequest = document.getElementById('searchbar').value
+            getArticles();
+        }
+    </script>
+</body>
+</html>
