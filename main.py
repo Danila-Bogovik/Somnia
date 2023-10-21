@@ -48,13 +48,10 @@ def page0():
 @application.route('/add_article', methods=['GET', 'POST'])
 def page1():
     if request.method == 'POST':
-        # title = bleach.clear(request.form.get('title'))
-        # subtitle = bleach.clear(request.form.get('subtitle'))
-        # text = bleach.clear(request.form.get('text'))
+        title = bleach.clear(request.form.get('title'))
+        subtitle = bleach.clear(request.form.get('subtitle'))
+        text = bleach.clear(request.form.get('text'))
 
-        title = request.form.get('title')
-        subtitle = request.form.get('subtitle')
-        text = request.form.get('text')
 
 
         db.add_new_article(title, subtitle, text)
