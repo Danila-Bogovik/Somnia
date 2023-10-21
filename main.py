@@ -32,12 +32,12 @@ from flask import Flask, render_template, request
 
 import dbModule as db
 
-app = Flask(__name__)
+application = Flask(__name__)
 
 '''
 обработчик от страницы создания статьи, получает из полей ввода строки и загружает в бд
 '''
-@app.route('/', methods=['GET', 'POST'])
+@application.route('/', methods=['GET', 'POST'])
 def page1():
     if request.method == 'POST':
         title = request.form.get('title')
@@ -51,7 +51,7 @@ def page1():
 обработчик от страницы поиска статьи, получает строку из поля ввода, если она состоит из букв - поиск по 
 вхождению фразы в заголовок, если из цифр - поиск по id
 '''
-@app.route('/find', methods=['GET', 'POST'])
+@application.route('/find', methods=['GET', 'POST'])
 def page2():
     if request.method == 'POST':
         data = request.form.get('data')
@@ -64,4 +64,4 @@ def page2():
     return render_template('find.html')
 
 if __name__ == "__main__":
-    app.run()
+    application.run(host='0.0.0.0')
