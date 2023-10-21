@@ -160,6 +160,7 @@ def find_by_substring_in_title(substring: str):
         return finded_articles
     
 # get data for search
+# amout and skip needed to escape situation, where user can get 1_000 articles by one request
 def get_data_for_search_by_substrinng(substring: str, amount: int, skip: int):
     amount = str(int(amount))
     skip = str(int(skip))
@@ -173,8 +174,11 @@ def get_data_for_search_by_substrinng(substring: str, amount: int, skip: int):
     data = cursor.fetchall()    
 
     dispose(connection, cursor)
-    
-    return data
+        
+    if len(data) == 0:
+        return None
+    else:
+        return data
 
 # find by id
 def find_by_id(id: str):
