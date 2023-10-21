@@ -24,6 +24,10 @@ SELECT * FROM articles WHERE id=@id;
 # select by title substring
 SELECT * FROM articles WHERE title LIKE '%@substring%';
 
+# select data for search
+SELECT id, title, subtitle, date_of_creation FROM articles
+WHERE title LIKE '%@substring%' LIMIT @amount OFFSET @skip;
+
 # delete article by id
 DELETE FROM articles WHERE id='@id';
 

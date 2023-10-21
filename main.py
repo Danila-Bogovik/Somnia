@@ -34,6 +34,9 @@ import dbModule as db
 
 application = Flask(__name__)
 
+
+print(db.get_data_for_search_by_substrinng('ti', 2, 1))
+
 '''
 обработчик от страницы создания статьи, получает из полей ввода строки и загружает в бд
 '''
