@@ -80,7 +80,7 @@ def page3():
 
 
 @application.route('/search?substring=<substring>', methods=['GET', 'POST'])
-def page3():
+def page4():
     if request.method == 'POST':
         data = request.form.get('data')
         if data.isalpha():
