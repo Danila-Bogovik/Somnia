@@ -36,7 +36,6 @@ import dbModule as db
 
 application = Flask(__name__)
 
-
 print(db.get_data_for_search_by_substrinng('ti', 2, 1))
 
 '''
@@ -75,6 +74,11 @@ def page1():
 #     return render_template('find.html')
 
 
+@application.route('/search', methods=['GET', 'POST'])
+def page3():
+    return render_template('search.html')
+
+
 @application.route('/search?substring=<substring>', methods=['GET', 'POST'])
 def page3():
     if request.method == 'POST':
@@ -88,7 +92,6 @@ def page3():
 
         elif data.isdigit():
             return db.find_by_id(data)
-
 
     return render_template('search.html')
 
