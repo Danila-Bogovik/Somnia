@@ -46,11 +46,23 @@ page_width = 10
 
 @application.route('/', methods=['GET', 'POST'])
 def page0():
-
     return render_template('index.html')
 
-@application.route('/add_picture', methods=['GET', 'POST'])
+
+@application.route('/add_articles', methods=['GET', 'POST'])
 def page1():
+    if request.method == 'POST':
+        title = request.form.get('title')
+        subtitle = request.form.get('subtitle')
+        text = request.form.get('text')
+
+        db.add_new_article(title, subtitle, text)
+    return render_template('index.html')
+
+
+
+@application.route('/add_picture', methods=['GET', 'POST'])
+def page2():
     if request.method == 'POST':
         image = request.files['image']
         print(image)

@@ -9,22 +9,20 @@
 </head>
 
 <body>
-    <form method="POST" >
+    <form method="POST" action = "/add_articles">
         <input type="text" name="title" placeholder="Введите заголовок">
         <input type="text" name="subtitle" placeholder="Введите подзаголовок">
         <input type="text" name="text" placeholder="Введите основной текст">
+
         <button type="submit">Отправить</button>
 
-        <a href="/search-page">
-            <button type="submit" >Поиск статей</button>
-        </a>
+        <a href="/search-page">Перейти на поиск</a>
 
 
-                <input type="file" name="image" accept="image/*" id="upload-image" style="display:none;" />
-                <a href="/add_picture">
+        <input type="file" name="image" accept="image/*" id="upload-image" style="display:none;" />
+        <a href="/add_picture">
         <button type="submit" onclick="document.getElementById('upload-image').click()">Загрузить картинку</button>
-                            </a>
-
-
+        </a>
+    </form>
 </body>
 </html>
