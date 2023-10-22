@@ -9,6 +9,8 @@ picture_name_max_length = 50
 picture_type_max_length = 15
 link_max_len = title_max_length * 2 + 50
 
+# logging. simplify debug
+log = print
 
 # function to get connection config
 def get_connection_config_dictionary():
@@ -38,7 +40,6 @@ def get_connection_config_dictionary():
     finally:
         return connection_config
 
-
 db_creation_line = f'''CREATE TABLE IF NOT EXISTS articles (
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
 	title VARCHAR({title_max_length}) NOT NULL,
@@ -58,7 +59,6 @@ CREATE TABLE IF NOT EXISTS article_links (
     FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE
 );
 '''
-
 
 add_article_line = '''
 INSERT INTO articles(title, subtitle, article) 
@@ -99,7 +99,6 @@ SELECT article_id FROM article_links
 WHERE link='@link';
 '''
 
-
 connection_config = get_connection_config_dictionary()
 
 # to get
@@ -116,20 +115,13 @@ def get_connection_and_cursor():
 def dispose(connection, cursor):
     connection.close()
     cursor.close()
-
+    
+# if db was not created, create
 connection = get_connection()
 cursor = connection.cursor()
-
 connection.autocommit = True
-
-# logging. simplify debug
-log = print
-
-# if db was not created, create
 cursor.execute(db_creation_line, multi = True)
-
 dispose(connection, cursor)
-
 
 def is_article_valid(title: str, subtitle: str, article: str):
     is_valid = len(title) <= title_max_length and len(subtitle) <= subtitle_max_length and len(article) <= text_max_lendth
@@ -141,7 +133,6 @@ def is_picture_valid(name: str, picture_type: str):
     is_valid = picture_type in acceptable_types and len(name) < picture_name_max_length
     
     return is_valid
-
 
 # function to add new article
 def add_new_article(title: str, subtitle: str, article: str):
@@ -159,7 +150,6 @@ def add_new_article(title: str, subtitle: str, article: str):
     finally:
         dispose(connection, cursor)
     
-
 # function to find by substring in title
 # if found nothing, return None
 def find_by_substring_in_title(substring: str):

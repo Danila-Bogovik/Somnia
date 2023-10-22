@@ -4,9 +4,6 @@ from Utils import replace_russian_with_english
 # change it, if you if you changed the domain
 link_prefix = 'https://webpractik-articles.ru/'
 
-
-
-
 def create_link(title: str, day: int, mounth: int):
     link = title.lower()
     
