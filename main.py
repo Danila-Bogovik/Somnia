@@ -28,8 +28,6 @@
 
 
 from flask import Flask, app, render_template, request, Response, jsonify
-import bleach
-from flask import Flask, render_template, request
 import dbModule as db
 
 import linksGenerator as lg
@@ -60,23 +58,15 @@ page_width = 10
 @application.route('/', methods=['GET', 'POST'])
 def page0():
     if request.method == 'POST':
-        title = bleach.clear(request.form.get('title'))
-        subtitle = bleach.clear(request.form.get('subtitle'))
-        text = bleach.clear(request.form.get('text'))
+        title = request.form.get('title')
+        subtitle = request.form.get('subtitle')
+        text = request.form.get('text')
 
         db.add_new_article(title, subtitle, text)
     return render_template('index.html')
 
 # @application.route('/add_article', methods=['GET', 'POST'])
 # def page1():
-#     if request.method == 'POST':
-#         title = bleach.clear(request.form.get('title'))
-#         subtitle = bleach.clear(request.form.get('subtitle'))
-#         text = bleach.clear(request.form.get('text'))
-#
-#
-#
-#         db.add_new_article(title, subtitle, text)
 #     return render_template('index.html')
 
 '''
@@ -133,11 +123,3 @@ def search_articles_with_substring():
 
 if __name__ == "__main__":
     application.run(host='0.0.0.0')
-
-
-
-
-
-
-
-    
