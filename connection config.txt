@@ -1,4 +1,4 @@
-host:127.0.0.1
-user:root
-password:1083
-database:test
+host:31.31.196.166
+user:u2301112_admin
+password:aC4vK9lQ9qxC4pW3
+database:u2301112_webpractik

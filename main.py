@@ -39,18 +39,18 @@ application = Flask(__name__)
 
 page_width = 10
 
-title = 'Бедный девопс'
-
-#db.add_new_article(title, 'Эх, бедолага!', '<b>Сегодня, с утра и до вечера, бедолага девопс не мог оживить умерший сайт...</b>')
-
-article_id = db.get_data_for_search_by_substrinng(title, 1, 0)[0][0]
-
-link = lg.create_link(title, 21, 10)
-
-#db.add_link_to_article(link, article_id)
-
-print(db.get_link_by_id(article_id))
-print(db.get_id_by_link(link))
+# title = 'Бедный девопс'
+#
+# db.add_new_article(title, 'Эх, бедолага!', '<b>Сегодня, с утра и до вечера, бедолага девопс не мог оживить умерший сайт...</b>')
+#
+# article_id = db.get_data_for_search_by_substrinng(title, 1, 0)[0][0]
+#
+# link = lg.create_link(title, 21, 10)
+#
+# db.add_link_to_article(link, article_id)
+#
+# print(db.get_link_by_id(article_id))
+# print(db.get_id_by_link(link))
 
 
 '''
@@ -59,19 +59,25 @@ print(db.get_id_by_link(link))
 
 @application.route('/', methods=['GET', 'POST'])
 def page0():
-    return render_template('index.html')
-
-@application.route('/add_article', methods=['GET', 'POST'])
-def page1():
     if request.method == 'POST':
         title = bleach.clear(request.form.get('title'))
         subtitle = bleach.clear(request.form.get('subtitle'))
         text = bleach.clear(request.form.get('text'))
 
-
-
         db.add_new_article(title, subtitle, text)
     return render_template('index.html')
+
+# @application.route('/add_article', methods=['GET', 'POST'])
+# def page1():
+#     if request.method == 'POST':
+#         title = bleach.clear(request.form.get('title'))
+#         subtitle = bleach.clear(request.form.get('subtitle'))
+#         text = bleach.clear(request.form.get('text'))
+#
+#
+#
+#         db.add_new_article(title, subtitle, text)
+#     return render_template('index.html')
 
 '''
 обработчик от страницы поиска статьи, получает строку из поля ввода, если она состоит из букв - поиск по 

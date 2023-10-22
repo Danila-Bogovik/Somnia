@@ -58,6 +58,8 @@ CREATE TABLE IF NOT EXISTS article_links (
     FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE
 );
 '''
+
+
 add_article_line = '''
 INSERT INTO articles(title, subtitle, article) 
 VALUES ('@title', '@subtitle', '@article');
@@ -124,7 +126,7 @@ connection.autocommit = True
 log = print
 
 # if db was not created, create
-cursor.execute(db_creation_line)
+cursor.execute(db_creation_line, multi = True)
 
 dispose(connection, cursor)
 
