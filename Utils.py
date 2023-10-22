@@ -2,6 +2,7 @@ import qrcode
 import io
 import base64
 
+
 def generate_qr_code(url):
     qr = qrcode.QRCode(
         version=2,
@@ -9,7 +10,7 @@ def generate_qr_code(url):
         box_size=10,
         border=4,
     )
-    
+
     qr.add_data(url)
     qr.make(fit=True)
     img = qr.make_image(fill_color="black", back_color="white")
@@ -17,10 +18,11 @@ def generate_qr_code(url):
     img_data = io.BytesIO()
     img.save(img_data, format='PNG')
     img_data.seek(0)
-    
+
     encoded_img_data = base64.b64encode(img_data.read()).decode('utf-8')
     html_code = f'<img src="data:image/png;base64,{encoded_img_data}" alt="QR Code">'
     return html_code
+
 
 def replace_russian_with_english(text):
     english_text = ''
@@ -36,21 +38,15 @@ def replace_russian_with_english(text):
         'я': 'ya', " ": "-"
     }
     for char in text:
-        if char.lower() in russian_to_english:
-            if char.isupper():
-                english_text += russian_to_english[char.lower()]
-            else:
-                english_text += russian_to_english[char]
-        else:
+        if char.isdigit():
+            english_text += char
+        elif char.lower() in russian_to_english:
+            english_text += russian_to_english[char.lower()]
+        elif char.isalpha():
             english_text += char
     return english_text
 
-#пример QR
+# пример QR
 # url = "https://example.com"
 # html = generate_qr_code(url)
 # print(html)
-
-#пример транслита
-# russian_text = "Женя гей"
-# english_text = replace_russian_with_english(russian_text)
-# print(english_text)  # Выводит "zhenya-gey"

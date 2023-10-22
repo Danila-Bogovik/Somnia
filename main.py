@@ -30,6 +30,8 @@
 from flask import Flask, app, render_template, request, Response, jsonify
 import dbModule as db
 import os
+
+import linksGenerator
 import linksGenerator as lg
 import Utils
 
@@ -56,7 +58,13 @@ def page1():
         subtitle = request.form.get('subtitle')
         text = request.form.get('text')
 
-        db.add_new_article(title, subtitle, text)
+        # db.add_new_article(title, subtitle, text)
+        # idd = db.get_data_for_search_by_substrinng(subtitle, 1, 0)[0][0]
+        #
+        # link = linksGenerator.create_link(title, db.get_data_for_search_by_substrinng(subtitle)[0])
+        # db.add_link_to_article(link, idd)
+        #
+
     return render_template('index.html')
 
 
@@ -93,7 +101,6 @@ def page2():
 обработчик от страницы поиска статьи, получает строку из поля ввода, если она состоит из букв - поиск по 
 вхождению фразы в заголовок, если из цифр - поиск по id
 '''
-
 
 
 
