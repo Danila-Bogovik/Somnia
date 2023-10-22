@@ -32,10 +32,26 @@ import bleach
 from flask import Flask, render_template, request
 import dbModule as db
 
+import linksGenerator as lg
+import Utils
 
 application = Flask(__name__)
 
 page_width = 10
+
+title = 'Бедный девопс'
+
+#db.add_new_article(title, 'Эх, бедолага!', '<b>Сегодня, с утра и до вечера, бедолага девопс не мог оживить умерший сайт...</b>')
+
+article_id = db.get_data_for_search_by_substrinng(title, 1, 0)[0][0]
+
+link = lg.create_link(title, 21, 10)
+
+#db.add_link_to_article(link, article_id)
+
+print(db.get_link_by_id(article_id))
+print(db.get_id_by_link(link))
+
 
 '''
 обработчик от страницы создания статьи, получает из полей ввода строки и загружает в бд

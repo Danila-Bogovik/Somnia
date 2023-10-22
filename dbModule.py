@@ -7,6 +7,7 @@ subtitle_max_length = 350
 text_max_lendth = 8_388_608
 picture_name_max_length = 50
 picture_type_max_length = 15
+link_max_len = title_max_length * 2 + 50
 
 
 # function to get connection config
@@ -51,6 +52,11 @@ CREATE TABLE IF NOT EXISTS pictures (
     picture_name VARCHAR({picture_name_max_length}) UNIQUE NOT NULL,
     picture_type VARCHAR({picture_type_max_length}) NOT NULL
 );
+CREATE TABLE IF NOT EXISTS article_links (
+	link VARCHAR({link_max_len}) PRIMARY KEY UNIQUE,
+    article_id INTEGER UNIQUE NOT NULL,
+    FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE
+);
 '''
 add_article_line = '''
 INSERT INTO articles(title, subtitle, article) 
@@ -77,6 +83,18 @@ SELECT * FROM pictures WHERE picture_name='@name';
 '''
 delete_picture_line = '''
 DELETE FROM pictures WHERE picture_name='@name';
+'''
+add_link_to_article_line = '''
+INSERT INTO article_links(link, article_id) 
+VALUES ('@link', @id)
+'''
+get_link_by_id_line = '''
+SELECT link FROM article_links 
+WHERE article_id=@id;
+'''
+get_id_by_link_line = '''
+SELECT article_id FROM article_links 
+WHERE link='@link';
 '''
 
 
@@ -106,7 +124,7 @@ connection.autocommit = True
 log = print
 
 # if db was not created, create
-cursor.execute(db_creation_line, multi=True)
+cursor.execute(db_creation_line)
 
 dispose(connection, cursor)
 
@@ -262,3 +280,55 @@ def delete_picture_from_db(name: str):
 
     dispose(connection, cursor)
 
+# add link by id
+def add_link_to_article(link: str, article_id: int):
+    article_id = str(int(article_id))    
+    
+    if len(link) > link_max_len:
+        raise Exception('invalid link')
+
+    connection, cursor = get_connection_and_cursor()
+    
+    sql_action = add_link_to_article_line.replace('@link', link).replace('@id', article_id)
+
+    cursor.execute(sql_action)
+
+    dispose(connection, cursor)
+
+    log(f'link {link} has been added')
+
+# get link by id
+def get_link_by_id(article_id: int):
+    article_id = str(int(article_id))
+    
+    connection, cursor = get_connection_and_cursor()
+    
+    sql_action = get_link_by_id_line.replace('@id', article_id)
+    
+    cursor.execute(sql_action)
+    
+    data = cursor.fetchall()
+
+    dispose(connection, cursor)
+    
+    if len(data) != 1:
+        return None
+    else:
+        return data[0][0]
+
+# get id by link
+def get_id_by_link(link: str):
+    connection, cursor = get_connection_and_cursor()
+    
+    sql_action = get_id_by_link_line.replace('@link', link)
+    
+    cursor.execute(sql_action)
+    
+    data = cursor.fetchall()
+
+    dispose(connection, cursor)
+    
+    if len(data) != 1:
+        return None
+    else:
+        return data[0][0]
