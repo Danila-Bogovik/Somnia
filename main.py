@@ -29,7 +29,7 @@
 
 from flask import Flask, app, render_template, request, Response, jsonify
 import dbModule as db
-
+import os
 import linksGenerator as lg
 import Utils
 
@@ -37,37 +37,45 @@ application = Flask(__name__)
 
 page_width = 10
 
-# title = 'Бедный девопс'
-#
-# db.add_new_article(title, 'Эх, бедолага!', '<b>Сегодня, с утра и до вечера, бедолага девопс не мог оживить умерший сайт...</b>')
-#
-# article_id = db.get_data_for_search_by_substrinng(title, 1, 0)[0][0]
-#
-# link = lg.create_link(title, 21, 10)
-#
-# db.add_link_to_article(link, article_id)
-#
-# print(db.get_link_by_id(article_id))
-# print(db.get_id_by_link(link))
-
 
 '''
 обработчик от страницы создания статьи, получает из полей ввода строки и загружает в бд
 '''
 
+
+
 @application.route('/', methods=['GET', 'POST'])
 def page0():
-    if request.method == 'POST':
-        title = request.form.get('title')
-        subtitle = request.form.get('subtitle')
-        text = request.form.get('text')
 
-        db.add_new_article(title, subtitle, text)
     return render_template('index.html')
 
-# @application.route('/add_article', methods=['GET', 'POST'])
-# def page1():
-#     return render_template('index.html')
+@application.route('/add_picture', methods=['GET', 'POST'])
+def page1():
+    if request.method == 'POST':
+        image = request.files['image']
+        print(image)
+        if image:
+            filename = image.filename    # this is for security purposes
+            image.save(filename)                         # save the image in the server (this is optional, you can directly read the bytes)
+            with open(filename, 'rb') as f:
+                picture_bytes = f.read()
+            os.remove(filename)                          # remove the image file from server
+
+            image_name = image.filename
+            image_type = os.path.splitext(image_name)[1]
+
+            try:
+                db.add_picture(picture_bytes, image_name, image_type)
+                return {"status": "success", "message": "Image uploaded successfully"}
+            except Exception as e:
+                return {"status": "failure", "message": str(e)}
+
+        else:
+            return {"status": "failure", "message": "No image found in the request"}
+
+    return render_template('index.html')
+
+
 
 '''
 обработчик от страницы поиска статьи, получает строку из поля ввода, если она состоит из букв - поиск по 
@@ -75,16 +83,6 @@ def page0():
 '''
 
 
-# @application.route('/find', methods=['GET', 'POST'])
-# def page2():
-#     if request.method == 'POST':
-#         data = request.form.get('data')
-#         if data.isalpha():
-#             return db.find_by_substring_in_title(data)
-#         elif data.isdigit():
-#             return db.find_by_id(data)
-#
-#     return render_template('find.html')
 
 
 
