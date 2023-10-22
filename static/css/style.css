@@ -107,9 +107,8 @@ input[name="title"] {
     border-radius: 15px;
     border: none;
     margin: 10px auto;
-    display: block;
+    display: flex;
 }
-
 
 input[name="subtitle"] {
     width: 1000px;
@@ -119,7 +118,7 @@ input[name="subtitle"] {
     border: none;
     margin: 10px auto;
 
-    display: block;
+    display: flex;
 }
 
 input[name="text"] {
@@ -129,11 +128,68 @@ input[name="text"] {
     border: none;
     border-radius: 15px;
     margin: 10px auto;
-    display: block;
+    display: flex;
 }
 
-button[type="submit"],
-button[type="submitе"],
+input[id="searchbar"] {
+    width: 50vh;
+    height: 2vh;
+    background-color: #DEDEDE;
+    border-radius: 12px;
+    border: none;
+    margin: 10px auto;
+    display: flex;
+}
+input[type="button"]{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000AFF;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    margin: 10px auto;
+    margin-left: auto;
+    padding: 10px 20px;
+}
+button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000AFF;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    margin: 10px auto;
+    margin-left: auto;
+    padding: 10px 20px;
+}
+
+button[type="submit"]{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000AFF;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    margin: 10px auto;
+    margin-left: auto;
+    padding: 10px 20px;
+}
+button[type="submitе"]{
+     background-color: #000AFF;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    margin: 10px auto;
+    margin-left: auto;
+    /* добавлено новое свойство */
+    display: inline-block;
+    padding: 10px 20px;
+    text-align: center;
+}
+
 button[type="searcharticles"] {
     background-color: #000AFF;
     color: white;
@@ -147,6 +203,12 @@ button[type="searcharticles"] {
     text-align: center;
 }
 
-button[type="submitе"] {
-    background-color: rgb(0, 4, 255);
+#outer
+{
+    width:100%;
+    text-align: center;
+}
+.inner
+{
+    display: inline-block;
 }

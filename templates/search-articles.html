@@ -11,18 +11,16 @@
 <body>
     <section>
         <input type="text" id="searchbar" />
-        <input type="button" id="search-button" value="Найти" />
-
-        <a href="/">
-            <button type="create">Создать статью</button>
-        </a>
-        <button type="downloadmore">Загрузить еще</button>
-
+            <div id="outer">
+                <div class="inner"><input type="button" id="search-button" value="Найти" /></div>
+                <a href="/">
+                    <div class="inner"><button type="create">Создать статью</button></div>
+                </a>
+                <div class="inner"><button type="downloadmore">Загрузить еще</button></div>
+            </div>
     </section>
-
     <section id="articles-place">
     </section>
-
     <script>
         let pageIndex = 0,
             searchRequest;
